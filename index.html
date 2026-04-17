@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 | 크리에이티브 개발자</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Black+Han+Sans&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <script defer src="./script.js"></script>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <nav class="navbar">
+        <div class="logo">DEV.</div>
+        <ul class="nav-links">
+            <li><a href="#about">소개</a></li>
+            <li><a href="#skills">스킬</a></li>
+            <li><a href="#contact">연락처</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="glitch" data-text="크리에이티브">크리에이티브</h1>
+            <h1 class="outline">개발자</h1>
+        </div>
+        <div class="scroll-indicator">
+            <span>스크롤</span>
+            <div class="line"></div>
+        </div>
+    </header>
+
+    <div class="marquee-container">
+        <div class="marquee">
+            <span>HTML & CSS • JAVASCRIPT • PYTHON • JAVA • </span>
+            <span>HTML & CSS • JAVASCRIPT • PYTHON • JAVA • </span>
+        </div>
+    </div>
+
+    <section id="about" class="section dark-section">
+        <div class="container">
+            <h2 class="section-title reveal-up">자기소개</h2>
+            <div class="about-grid">
+                <div class="about-text reveal-up">
+                    <p>저는 <span class="highlight">HTML & CSS</span>를 기반으로 탄탄한 기본기를 갖춘 웹 개발자입니다. 단순히 기능적인 것을 넘어 시각적으로 돋보이는 웹 경험을 만듭니다.</p>
+                    <p>코딩을 향한 저의 여정은 멈추지 않습니다. 현재 <span class="highlight">JavaScript</span> 스킬을 연마하고 있으며, <span class="highlight">Python</span>과 <span class="highlight">Java</span>를 통해 백엔드 및 객체 지향 프로그래밍으로 영역을 넓혀가고 있습니다.</p>
+                </div>
+                <div class="about-image reveal-up" data-delay="0.2">
+                    <img src="./profile.png" alt="Profile" class="fancy-profile-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 class="section-title reveal-up">보유 스킬</h2>
+            <div class="skills-wrapper">
+                <div class="skill-item reveal-up">
+                    <div class="skill-info">
+                        <span class="skill-name">HTML & CSS</span>
+                        <span class="skill-level">능숙함</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress" data-width="95%"></div></div>
+                </div>
+                <div class="skill-item reveal-up" data-delay="0.1">
+                    <div class="skill-info">
+                        <span class="skill-name">JAVASCRIPT</span>
+                        <span class="skill-level">보통</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress" data-width="60%"></div></div>
+                </div>
+                <div class="skill-item reveal-up" data-delay="0.2">
+                    <div class="skill-info">
+                        <span class="skill-name">PYTHON</span>
+                        <span class="skill-level">학습 중</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress" data-width="30%"></div></div>
+                </div>
+                <div class="skill-item reveal-up" data-delay="0.3">
+                    <div class="skill-info">
+                        <span class="skill-name">JAVA</span>
+                        <span class="skill-level">학습 중</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress" data-width="25%"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="footer dark-section">
+        <div class="container">
+            <h2 class="huge-text reveal-up">연락주세요.</h2>
+            <a href="mailto:hello@example.com" class="contact-btn reveal-up" data-delay="0.2">이메일 보내기</a>
+        </div>
+    </footer>
+</body>
+</html>
