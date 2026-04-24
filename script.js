@@ -83,4 +83,139 @@ document.addEventListener('DOMContentLoaded', () => {
             heroTitle.style.transform = `translateY(${scrollY * 0.4}px)`;
         }
     });
+
+    // --- Guestbook (Board) Logic ---
+    const boardForm = document.getElementById('board-form');
+    const boardList = document.getElementById('board-list');
+    
+    // Key for localStorage
+    const STORAGE_KEY = 'portfolio_guestbook';
+
+    // Load messages from localStorage
+    function loadMessages() {
+        const data = localStorage.getItem(STORAGE_KEY);
+        return data ? JSON.parse(data) : [];
+    }
+
+    // Save messages to localStorage
+    function saveMessages(messages) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHTML(str) {
+        return str.replace(/[&<>'"]/g, 
+            tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag)
+        );
+    }
+
+    // Render a single message element
+    function createMessageElement(msg) {
+        const div = document.createElement('div');
+        // Initial state for animation if rendered later, but for simplicity let's just make it active if it's already rendered
+        div.className = 'board-item reveal-up active'; 
+        
+        div.innerHTML = `
+            <button class="delete-btn" data-id="${msg.id}">삭제</button>
+            <div class="board-header">
+                <span class="board-name">${escapeHTML(msg.name)}</span>
+                <span class="board-date">${msg.date}</span>
+            </div>
+            <div class="board-content">${escapeHTML(msg.message)}</div>
+        `;
+
+        // Handle delete
+        const deleteBtn = div.querySelector('.delete-btn');
+        deleteBtn.addEventListener('click', () => {
+            const pwd = prompt('비밀번호를 입력하세요:');
+            if (pwd === null) return;
+            
+            if (pwd === msg.password) {
+                let messages = loadMessages();
+                messages = messages.filter(m => m.id !== msg.id);
+                saveMessages(messages);
+                renderAllMessages();
+            } else {
+                alert('비밀번호가 일치하지 않습니다.');
+            }
+        });
+
+        // Add hover effects for custom cursor
+        if (window.matchMedia("(pointer: fine)").matches && cursorFollower) {
+            deleteBtn.addEventListener('mouseenter', () => cursorFollower.classList.add('active'));
+            deleteBtn.addEventListener('mouseleave', () => cursorFollower.classList.remove('active'));
+        }
+
+        return div;
+    }
+
+    // Render all messages
+    function renderAllMessages() {
+        if (!boardList) return;
+        boardList.innerHTML = '';
+        const messages = loadMessages();
+        
+        if (messages.length === 0) {
+            boardList.innerHTML = '<p style="color: #666; font-size: 1.1rem; text-align: center; padding: 2rem 0;">등록된 방명록이 없습니다. 첫 번째 글을 남겨주세요!</p>';
+            return;
+        }
+
+        // Show newest first
+        messages.slice().reverse().forEach(msg => {
+            boardList.appendChild(createMessageElement(msg));
+        });
+    }
+
+    // Handle form submit
+    if (boardForm) {
+        boardForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('board-name');
+            const passwordInput = document.getElementById('board-password');
+            const messageInput = document.getElementById('board-message');
+
+            const newMsg = {
+                id: Date.now().toString(),
+                name: nameInput.value.trim(),
+                password: passwordInput.value,
+                message: messageInput.value.trim(),
+                date: new Date().toLocaleDateString('ko-KR', { 
+                    year: 'numeric', month: '2-digit', day: '2-digit',
+                    hour: '2-digit', minute: '2-digit'
+                })
+            };
+
+            if (!newMsg.name || !newMsg.password || !newMsg.message) {
+                alert('모든 필드를 입력해주세요.');
+                return;
+            }
+
+            const messages = loadMessages();
+            messages.push(newMsg);
+            saveMessages(messages);
+            
+            // Reset form
+            boardForm.reset();
+            
+            // Re-render
+            renderAllMessages();
+        });
+
+        // Initial render
+        renderAllMessages();
+        
+        // Add submit button to links list for hover effect
+        const submitBtn = document.querySelector('.submit-btn');
+        if (window.matchMedia("(pointer: fine)").matches && cursorFollower && submitBtn) {
+            submitBtn.addEventListener('mouseenter', () => cursorFollower.classList.add('active'));
+            submitBtn.addEventListener('mouseleave', () => cursorFollower.classList.remove('active'));
+        }
+    }
 });
