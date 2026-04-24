@@ -122,16 +122,33 @@ document.addEventListener('DOMContentLoaded', () => {
         div.className = 'board-item reveal-up active'; 
         
         div.innerHTML = `
-            <button class="delete-btn" data-id="${msg.id}">삭제</button>
+            <div class="action-btns">
+                <button class="action-btn edit-btn" data-id="${msg.id}">수정</button>
+                <button class="action-btn delete-btn" data-id="${msg.id}">삭제</button>
+            </div>
             <div class="board-header">
                 <span class="board-name">${escapeHTML(msg.name)}</span>
-                <span class="board-date">${msg.date}</span>
+                <span class="board-date">${msg.date}${msg.edited ? ' (수정됨)' : ''}</span>
             </div>
             <div class="board-content">${escapeHTML(msg.message)}</div>
+            <div class="edit-area">
+                <textarea class="edit-textarea" style="width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--accent-color); color: #f4f4f4; padding: 1rem 0; font-size: 1.1rem; font-family: inherit; resize: vertical;" rows="3">${escapeHTML(msg.message)}</textarea>
+                <div class="edit-btns">
+                    <button class="action-submit-btn save-edit-btn">저장</button>
+                    <button class="action-submit-btn cancel-btn">취소</button>
+                </div>
+            </div>
         `;
 
-        // Handle delete
         const deleteBtn = div.querySelector('.delete-btn');
+        const editBtn = div.querySelector('.edit-btn');
+        const editArea = div.querySelector('.edit-area');
+        const boardContent = div.querySelector('.board-content');
+        const cancelBtn = div.querySelector('.cancel-btn');
+        const saveEditBtn = div.querySelector('.save-edit-btn');
+        const editTextArea = div.querySelector('.edit-textarea');
+
+        // Handle delete
         deleteBtn.addEventListener('click', () => {
             const pwd = prompt('비밀번호를 입력하세요:');
             if (pwd === null) return;
@@ -146,10 +163,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Handle edit toggle
+        editBtn.addEventListener('click', () => {
+            const pwd = prompt('수정하려면 비밀번호를 입력하세요:');
+            if (pwd === null) return;
+
+            if (pwd === msg.password) {
+                boardContent.style.display = 'none';
+                editArea.style.display = 'flex';
+                editTextArea.value = msg.message; // Reset to current message
+            } else {
+                alert('비밀번호가 일치하지 않습니다.');
+            }
+        });
+
+        // Handle edit cancel
+        cancelBtn.addEventListener('click', () => {
+            boardContent.style.display = 'block';
+            editArea.style.display = 'none';
+        });
+
+        // Handle edit save
+        saveEditBtn.addEventListener('click', () => {
+            const newContent = editTextArea.value.trim();
+            if (!newContent) {
+                alert('내용을 입력해주세요.');
+                return;
+            }
+
+            let messages = loadMessages();
+            const msgIndex = messages.findIndex(m => m.id === msg.id);
+            if (msgIndex !== -1) {
+                messages[msgIndex].message = newContent;
+                messages[msgIndex].edited = true;
+                saveMessages(messages);
+                renderAllMessages();
+            }
+        });
+
         // Add hover effects for custom cursor
         if (window.matchMedia("(pointer: fine)").matches && cursorFollower) {
-            deleteBtn.addEventListener('mouseenter', () => cursorFollower.classList.add('active'));
-            deleteBtn.addEventListener('mouseleave', () => cursorFollower.classList.remove('active'));
+            const btns = [deleteBtn, editBtn, cancelBtn, saveEditBtn];
+            btns.forEach(btn => {
+                btn.addEventListener('mouseenter', () => cursorFollower.classList.add('active'));
+                btn.addEventListener('mouseleave', () => cursorFollower.classList.remove('active'));
+            });
         }
 
         return div;
