@@ -543,10 +543,15 @@ h1, h2, h3, .logo, .marquee {
     margin-top: 0.5rem;
 }
 
-.delete-btn {
+.action-btns {
     position: absolute;
     top: 2.5rem;
     right: 2.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.action-btn {
     background: none;
     border: none;
     color: #444;
@@ -556,8 +561,46 @@ h1, h2, h3, .logo, .marquee {
     transition: color 0.3s ease;
 }
 
-.delete-btn:hover {
+.action-btn:hover {
     color: var(--accent-color);
+}
+
+.edit-area {
+    margin-top: 1rem;
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.edit-btns {
+    display: flex;
+    gap: 1rem;
+}
+
+.action-submit-btn {
+    padding: 0.5rem 1.5rem;
+    background-color: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: none;
+    transition: all 0.3s ease;
+}
+
+.action-submit-btn:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+}
+
+.cancel-btn {
+    color: #aaa;
+    border-color: #555;
+}
+
+.cancel-btn:hover {
+    background-color: #555;
+    color: #fff;
 }
 
 @media (max-width: 768px) {
@@ -565,7 +608,7 @@ h1, h2, h3, .logo, .marquee {
         flex-direction: column;
         gap: 0;
     }
-    .submit-btn, .delete-btn {
+    .submit-btn, .action-btn, .action-submit-btn {
         cursor: pointer;
     }
     .board-form {
@@ -574,7 +617,7 @@ h1, h2, h3, .logo, .marquee {
     .board-item {
         padding: 1.5rem;
     }
-    .delete-btn {
+    .action-btns {
         top: 1.5rem;
         right: 1.5rem;
     }
